@@ -37,8 +37,6 @@ public class ItemGenerator : MonoBehaviour
     void Update()
     {
 
-        
-
         if (startPos <= unitychan.transform.position.z && this.unitychan.transform.position.z <= goalPos)
         {
 
@@ -56,24 +54,16 @@ public class ItemGenerator : MonoBehaviour
                     for (float j = -1; j <= 1; j += 0.4f)
 
                     {
-
                         GameObject cone = Instantiate(conePrefab);
 
                         cone.transform.position = new Vector3(4 * j, cone.transform.position.y, lastGeneratePosZ + 50);
-
                     }
-
                 }
-
                 else
-
                 {
-
                     //レーンごとにアイテム生成
                     for (int j = -1; j <= 1; j++)
-
                     {
-
                         //アイテムの種類を決める
                         int item = Random.Range(1, 11);
 
@@ -84,23 +74,16 @@ public class ItemGenerator : MonoBehaviour
                         if (1 <= item && item <= 6)
 
                         {
-
                             //コインを生成
                             GameObject coin = Instantiate(coinPrefab);
 
                             coin.transform.position = new Vector3(posRange * j, coin.transform.position.y, lastGeneratePosZ + 50 + offsetZ);
                         }
-
                         else if (7 <= item && item <= 9)
-
                         {
-
                             //車を生成
                             GameObject car = Instantiate(carPrefab);
-
                             car.transform.position = new Vector3(posRange * j, car.transform.position.y, lastGeneratePosZ + 50 + offsetZ);
-
-
                         }
 
 
