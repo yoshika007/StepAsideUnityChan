@@ -13,14 +13,15 @@ public class ItemGenerator : MonoBehaviour
     //スタート地点
     private int startPos = 80;
     //ゴール地点
-    private int goalPos = 360;
+    private int goalPos = 310;
     //アイテムを出すx方向の範囲
     private float posRange = 3.4f;
 
     //Unityちゃんのオブジェクト
     private GameObject unitychan;
-    
-    private float difference;
+   
+    //最後にアイテムを生成したz座標
+    private float lastGeneratePosZ;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +29,7 @@ public class ItemGenerator : MonoBehaviour
 
         //ユニティちゃんのオブジェクトを取得
         this.unitychan = GameObject.Find("unitychan");
+        lastGeneratePosZ = unitychan.transform.position.z;
         
     }
 
@@ -35,62 +37,72 @@ public class ItemGenerator : MonoBehaviour
     void Update()
     {
 
-        this.difference = unitychan.transform.position.z + 50;
+        
 
-        if (startPos <= this.difference && this.difference <= goalPos)
+        if (startPos <= unitychan.transform.position.z && this.unitychan.transform.position.z <= goalPos)
         {
 
-            //どのアイテムを出すのかランダムに設定
-            int num = Random.Range(1, 1000);
-
-            if (num <= 3)
+            if(unitychan.transform.position.z - lastGeneratePosZ > 15)
             {
-                //コーンをx軸方向に一直線に生成
+                lastGeneratePosZ = unitychan.transform.position.z;
 
-                for (float j = -1; j <= 1; j += 0.4f)
+                //どのアイテムを出すのかランダムに設定
+                int num = Random.Range(1, 11);
 
+                if (num <= 2)
                 {
-                    
-                    GameObject cone = Instantiate(conePrefab);
-                    cone.transform.position = new Vector3(4 * j, cone.transform.position.y, this.difference);
+                    //コーンをx軸方向に一直線に生成
 
-                }
-
-            }
-
-            else if(num <=30)
-
-            {
-
-                //レーンごとにアイテム生成
-                for (int j = -1; j <= 1; j++)
-
-                {
-
-                    //アイテムの種類を決める
-                    int item = Random.Range(1, 11);
-
-                    //アイテムを置くZ座標のオフセットをランダムに設定
-                    int offsetZ = Random.Range(-5, 6);
-
-                    //60％コイン配置：30％車配置：10％何もなし
-                    if (1 <= item && item <= 6)
+                    for (float j = -1; j <= 1; j += 0.4f)
 
                     {
 
-                        //コインを生成
-                        GameObject coin = Instantiate(coinPrefab);
-                        coin.transform.position = new Vector3(posRange * j, coin.transform.position.y, this.difference + offsetZ);
+                        GameObject cone = Instantiate(conePrefab);
+
+                        cone.transform.position = new Vector3(4 * j, cone.transform.position.y, lastGeneratePosZ + 50);
 
                     }
 
-                    else if (7 <= item && item <= 9)
+                }
+
+                else
+
+                {
+
+                    //レーンごとにアイテム生成
+                    for (int j = -1; j <= 1; j++)
 
                     {
 
-                        //車を生成
-                        GameObject car = Instantiate(carPrefab);
-                        car.transform.position = new Vector3(posRange * j, car.transform.position.y, this.difference + offsetZ);
+                        //アイテムの種類を決める
+                        int item = Random.Range(1, 11);
+
+                        //アイテムを置くZ座標のオフセットをランダムに設定
+                        int offsetZ = Random.Range(-5, 6);
+
+                        //60％コイン配置：30％車配置：10％何もなし
+                        if (1 <= item && item <= 6)
+
+                        {
+
+                            //コインを生成
+                            GameObject coin = Instantiate(coinPrefab);
+
+                            coin.transform.position = new Vector3(posRange * j, coin.transform.position.y, lastGeneratePosZ + 50 + offsetZ);
+                        }
+
+                        else if (7 <= item && item <= 9)
+
+                        {
+
+                            //車を生成
+                            GameObject car = Instantiate(carPrefab);
+
+                            car.transform.position = new Vector3(posRange * j, car.transform.position.y, lastGeneratePosZ + 50 + offsetZ);
+
+
+                        }
+
 
                     }
 
@@ -99,6 +111,9 @@ public class ItemGenerator : MonoBehaviour
 
 
             }
+
+
+            
 
         }
 
